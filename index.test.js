@@ -117,7 +117,7 @@ describe('Testes E2E', () => {
       await page.keyboard.type(usuarios[0].nome);
 
       await expect(page.waitForSelector(seletores.textos.loginErro, {visible: false})).resolves.toBeTruthy();
-      await page.click(seletores.botoes.irCadastrar);
+      await page.click(seletores.botoes.irEntrar);
 
       await expect(page.title()).resolves.toMatch(seletores.titulos.login);
       await expect(page.waitForSelector(seletores.botoes.irCadastrar)).resolves.toBeTruthy();
@@ -139,7 +139,7 @@ describe('Testes E2E', () => {
       await page.keyboard.type(usuarios[0].senhaErrada);
 
       await expect(page.waitForSelector(seletores.textos.loginErro, {visible: false})).resolves.toBeTruthy();
-      await page.click(seletores.botoes.irCadastrar);
+      await page.click(seletores.botoes.irEntrar);
 
       await expect(page.title()).resolves.toMatch(seletores.titulos.login);
       await expect(page.waitForSelector(seletores.botoes.irCadastrar)).resolves.toBeTruthy();
@@ -165,6 +165,7 @@ describe('Testes E2E', () => {
 
       await expect(page.waitForSelector(seletores.textos.signupErro, {visible: true})).resolves.toBeTruthy();
     });
+    
     it('Na tela "cadastar", sem adicionar nada em apenas um dos inputs para cada input, deve não cadastrar o usuario, não saindo da página e emitindo mensagem avisando usuario', async () => {
       if(await page.url() != urls.cadastrar){
         await page.goto(urls.cadastrar);
@@ -217,6 +218,8 @@ describe('Testes E2E', () => {
 
       await expect(page.waitForSelector(seletores.textos.signupErro, {visible: true})).resolves.toBeTruthy();
       
+      await page.reload();
+
       // Nada só em: "Email"
       await page.click(seletores.inputs.signupNome);
       await page.keyboard.type(usuarios[0].nome);
@@ -239,6 +242,8 @@ describe('Testes E2E', () => {
 
       await expect(page.waitForSelector(seletores.textos.signupErro, {visible: true})).resolves.toBeTruthy();
       
+      await page.reload();
+
       // Nada só em: "Sexo"
       await page.click(seletores.inputs.signupNome);
       await page.keyboard.type(usuarios[0].nome);
@@ -262,6 +267,8 @@ describe('Testes E2E', () => {
 
       await expect(page.waitForSelector(seletores.textos.signupErro, {visible: true})).resolves.toBeTruthy();
       
+      await page.reload();
+
       // Nada só em: "Senha"
       await page.click(seletores.inputs.signupNome);
       await page.keyboard.type(usuarios[0].nome);
@@ -284,7 +291,9 @@ describe('Testes E2E', () => {
 
       await expect(page.waitForSelector(seletores.textos.signupErro, {visible: true})).resolves.toBeTruthy();
       
-    // Nada só em: "Confirmar Senha"
+      await page.reload();
+
+      // Nada só em: "Confirmar Senha"
       await page.click(seletores.inputs.signupNome);
       await page.keyboard.type(usuarios[0].nome);
       await page.click(seletores.inputs.signupMatricula);
