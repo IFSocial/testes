@@ -1,4 +1,4 @@
-jest.setTimeout(10000);
+jest.setTimeout(20000);
 
 const usuarios = [];
 usuarios.push(criarUsuario("fulano de sicrano", "fulano@escolar.ifrn.edu.br", "20201038060099", "senha123"));
@@ -65,14 +65,38 @@ describe('Testes E2E', () => {
       if(await page.url() != urls.login){
         await page.goto(urls.login);
       }
+      if(await page.url() == urls.home){
+        await page.click(seletores.botoes.homeSair);
+        if(await page.url() != urls.login){
+          await page.goto(urls.login);
+        }
+      }
 
       await page.goto(urls.home);
+      await expect(page.title()).resolves.toMatch("");
+      await expect(page.waitForSelector(seletores.botoes.irEntrar)).resolves.toBeTruthy();
+    
+
+    });
+
+    it('Tela que bloqueia acesso sem a autenticação deve ter um botão que leva a tela de Login', async () => {
+      if(await page.url() != urls.login){
+        await page.goto(urls.login);
+      }
+      if(await page.url() == urls.home){
+        await page.click(seletores.botoes.homeSair);
+        if(await page.url() != urls.login){
+          await page.goto(urls.login);
+        }
+      }
+
+      await page.goto(urls.home);
+      await page.click(seletores.botoes.irEntrar);
+
       await expect(page.title()).resolves.toMatch(seletores.titulos.login);
       await expect(page.waitForSelector(seletores.botoes.irCadastrar)).resolves.toBeTruthy();
       await expect(page.waitForSelector(seletores.inputs.loginEmail)).resolves.toBeTruthy();
       await expect(page.waitForSelector(seletores.inputs.loginSenha)).resolves.toBeTruthy();
-    
-
     });
 
     it('Ao cliquar em "entrar" na tela inicial sem adicionar nada em nenhum input, deve não fazer login, não saindo da página e emitindo mensagem avisando usuario', async () => {
@@ -403,7 +427,7 @@ describe('Testes E2E', () => {
       await expect(page.waitForSelector(seletores.inputs.loginSenha)).resolves.toBeTruthy();
     });
 
-    it('Fazendo login do usuario logo aposo cadastro, deve ir para a pagina Home', async () => {
+    it('Fazendo login do usuario logo após o cadastro, deve ir para a pagina Home', async () => {
       if(await page.url() != urls.login){
         await page.goto(urls.login);
       }
