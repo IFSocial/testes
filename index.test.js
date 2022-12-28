@@ -1,4 +1,4 @@
-jest.setTimeout(20000);
+jest.setTimeout(10000);
 
 const usuarios = [];
 usuarios.push(criarUsuario("fulano de sicrano", "fulano@escolar.ifrn.edu.br", "20201038060099", "senha123"));
@@ -74,7 +74,7 @@ describe('Testes E2E', () => {
 
       await page.goto(urls.home);
       await expect(page.title()).resolves.toMatch("");
-      await expect(page.waitForSelector(seletores.botoes.irEntrar)).resolves.toBeTruthy();
+      await expect(page.waitForSelector(seletores.botoes.irLogin)).resolves.toBeTruthy();
     
 
     });
@@ -91,7 +91,7 @@ describe('Testes E2E', () => {
       }
 
       await page.goto(urls.home);
-      await page.click(seletores.botoes.irEntrar);
+      await page.click(seletores.botoes.irLogin);
 
       await expect(page.title()).resolves.toMatch(seletores.titulos.login);
       await expect(page.waitForSelector(seletores.botoes.irCadastrar)).resolves.toBeTruthy();
@@ -338,7 +338,7 @@ describe('Testes E2E', () => {
       await expect(page.waitForSelector(seletores.inputs.signupMasculino)).resolves.toBeTruthy();
 
       await expect(page.waitForSelector(seletores.textos.signupErro, {visible: true})).resolves.toBeTruthy();
-    });
+    }, 25000);
 
     it('Na tela "cadastar", adicionando tudo, porem com um e-mail invalido, deve não cadastrar o usuario, não saindo da página e emitindo mensagem avisando usuario', async () => {
       if(await page.url() != urls.cadastrar){
@@ -494,6 +494,7 @@ function receberSeletores(){
   const botoes = {
     irCadastrar: 'button[data-testid="btnCadastrar"]',
     irEntrar: 'button[data-testid="btnEntrar"]',
+    irLogin: 'button[data-testid="btnLogin"]',
     entrar: 'button[data-testid="btnEntrar"]',
     cadastrar: 'button[data-testid="cadastrar"]',
     homeEdital: 'button[data-testid="edital"]',
@@ -513,8 +514,8 @@ function receberSeletores(){
 
   };
   const textos = {
-    loginErro: 'label[data-testid="loginErro"]',
-    signupErro: 'label[data-testid="signupErro"]',
+    loginErro: 'label[data-testeid="loginErro"]',
+    signupErro: 'label[data-testeid="signupErro"]',
   }
   const titulos = {
     login: 'Semadec - Login',
