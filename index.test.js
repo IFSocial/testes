@@ -73,10 +73,29 @@ describe('Testes E2E', () => {
       }
 
       await page.goto(urls.home);
+      await page.waitForSelector(seletores.botoes.irLogin);
       await expect(page.title()).resolves.toMatch("");
       await expect(page.waitForSelector(seletores.botoes.irLogin)).resolves.toBeTruthy();
     
+      await page.goto(urls.modalidades);
+      await page.waitForSelector(seletores.botoes.irLogin);
+      await expect(page.title()).resolves.toMatch("");
+      await expect(page.waitForSelector(seletores.botoes.irLogin)).resolves.toBeTruthy();
 
+      await page.goto(urls.horarios);
+      await page.waitForSelector(seletores.botoes.irLogin);
+      await expect(page.title()).resolves.toMatch("");
+      await expect(page.waitForSelector(seletores.botoes.irLogin)).resolves.toBeTruthy();
+
+      await page.goto(urls.contatos);
+      await page.waitForSelector(seletores.botoes.irLogin);
+      await expect(page.title()).resolves.toMatch("");
+      await expect(page.waitForSelector(seletores.botoes.irLogin)).resolves.toBeTruthy();
+
+      await page.goto(urls.perfil);
+      await page.waitForSelector(seletores.botoes.irLogin);
+      await expect(page.title()).resolves.toMatch("");
+      await expect(page.waitForSelector(seletores.botoes.irLogin)).resolves.toBeTruthy();
     });
 
     it('Tela que bloqueia acesso sem a autenticação deve ter um botão que leva a tela de Login', async () => {
@@ -418,9 +437,11 @@ describe('Testes E2E', () => {
       await page.keyboard.type(usuarios[0].senha);
       await page.click(seletores.inputs.signupConfSenha);
       await page.keyboard.type(usuarios[0].senha);
-
+      
+      await page.waitForSelector(seletores.botoes.cadastrar);
       await page.click(seletores.botoes.cadastrar);
-
+      await page.waitForSelector(seletores.botoes.irCadastrar);
+      
       await expect(page.title()).resolves.toMatch(seletores.titulos.login);
       await expect(page.waitForSelector(seletores.botoes.irCadastrar)).resolves.toBeTruthy();
       await expect(page.waitForSelector(seletores.inputs.loginEmail)).resolves.toBeTruthy();
@@ -437,34 +458,39 @@ describe('Testes E2E', () => {
       await page.keyboard.type(usuarios[0].senha);
 
       await page.click(seletores.botoes.entrar);
+      await page.waitForSelector(seletores.botoes.homeEdital);
 
       await expect(page.title()).resolves.toMatch(seletores.titulos.home);
       await expect(page.waitForSelector(seletores.botoes.homeEdital)).resolves.toBeTruthy();
-      await expect(page.waitForSelector(seletores.inputs.homeModalidade)).resolves.toBeTruthy();
-      await expect(page.waitForSelector(seletores.inputs.homeSair)).resolves.toBeTruthy();
+      await expect(page.waitForSelector(seletores.botoes.homeModalidade)).resolves.toBeTruthy();
+      await expect(page.waitForSelector(seletores.botoes.homeSair)).resolves.toBeTruthy();
     });
 
     it('Se o login foi feto com sucesso no teste anterior, não deve ser possivel acessar nem a pagina de login nem de cadastro estando autenticado, retornando sempre para a Home', async () => {
       await page.goto(urls.login);
+      await page.waitForSelector(seletores.botoes.homeEdital);
 
       await expect(page.title()).resolves.toMatch(seletores.titulos.home);
       await expect(page.waitForSelector(seletores.botoes.homeEdital)).resolves.toBeTruthy();
-      await expect(page.waitForSelector(seletores.inputs.homeModalidade)).resolves.toBeTruthy();
-      await expect(page.waitForSelector(seletores.inputs.homeSair)).resolves.toBeTruthy();
+      await expect(page.waitForSelector(seletores.botoes.homeModalidade)).resolves.toBeTruthy();
+      await expect(page.waitForSelector(seletores.botoes.homeSair)).resolves.toBeTruthy();
 
       await page.goto(urls.cadastrar);
+      await page.waitForSelector(seletores.botoes.homeEdital);
 
       await expect(page.title()).resolves.toMatch(seletores.titulos.home);
       await expect(page.waitForSelector(seletores.botoes.homeEdital)).resolves.toBeTruthy();
-      await expect(page.waitForSelector(seletores.inputs.homeModalidade)).resolves.toBeTruthy();
-      await expect(page.waitForSelector(seletores.inputs.homeSair)).resolves.toBeTruthy();
+      await expect(page.waitForSelector(seletores.botoes.homeModalidade)).resolves.toBeTruthy();
+      await expect(page.waitForSelector(seletores.botoes.homeSair)).resolves.toBeTruthy();
     });
 
     it('Estando ainda autenticado na Home, botão sair deve retirar a autenticação e voltar ao login, não permitindo acesso a Home novamente', async ()=> {
       if(await page.url() != urls.home){
        await page.goto(urls.home);
       }
-      await page.screenshot({path: 'teste.png'})
+      await page.waitForSelector(seletores.botoes.homeSair);
+      await page.click(seletores.botoes.homeSair);
+      await page.waitForSelector(seletores.botoes.irCadastrar);
 
       await expect(page.title()).resolves.toMatch(seletores.titulos.login);
       await expect(page.waitForSelector(seletores.botoes.irCadastrar)).resolves.toBeTruthy();
@@ -472,11 +498,10 @@ describe('Testes E2E', () => {
       await expect(page.waitForSelector(seletores.inputs.loginSenha)).resolves.toBeTruthy();
 
       await page.goto(urls.home);
+      await page.waitForSelector(seletores.botoes.irLogin);
 
-      await expect(page.title()).resolves.toMatch(seletores.titulos.login);
-      await expect(page.waitForSelector(seletores.botoes.irCadastrar)).resolves.toBeTruthy();
-      await expect(page.waitForSelector(seletores.inputs.loginEmail)).resolves.toBeTruthy();
-      await expect(page.waitForSelector(seletores.inputs.loginSenha)).resolves.toBeTruthy();
+      await expect(page.title()).resolves.toMatch("");
+      await expect(page.waitForSelector(seletores.botoes.irLogin)).resolves.toBeTruthy();
     });
   });
 
@@ -529,6 +554,10 @@ function receberUrls(){
   return {
     login: 'http://localhost:3000',
     cadastrar: 'http://localhost:3000/signup',
-    home: 'http://localhost:3000/home'
+    home: 'http://localhost:3000/home',
+    modalidades: 'http://localhost:3000/modalidades',
+    horarios: 'http://localhost:3000/horarios',
+    contatos: 'http://localhost:3000/contatos',
+    perfil: 'http://localhost:3000/perfil'
   };
 }
