@@ -551,13 +551,14 @@ function receberSeletores(){
 }
 
 function receberUrls(){
+  const url = "http://10.49.6.3:3000"
   return {
-    login: 'http://localhost:3000',
-    cadastrar: 'http://localhost:3000/signup',
-    home: 'http://localhost:3000/home',
-    modalidades: 'http://localhost:3000/modalidades',
-    horarios: 'http://localhost:3000/horarios',
-    contatos: 'http://localhost:3000/contatos',
-    perfil: 'http://localhost:3000/perfil'
+    login: url,
+    cadastrar: `${url}/signup`,
+    home: `${url}/home`,
+    modalidades: `${url}/modalidades`,
+    horarios: `${url}/horarios`,
+    contatos: `${url}/contatos`,
+    perfil: `${url}/perfil`
   };
 }
