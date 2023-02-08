@@ -96,6 +96,21 @@ describe('Testes E2E', () => {
       await page.waitForSelector(seletores.botoes.irLogin);
       await expect(page.title()).resolves.toMatch("");
       await expect(page.waitForSelector(seletores.botoes.irLogin)).resolves.toBeTruthy();
+
+      await page.goto(urls.times);
+      await page.waitForSelector(seletores.botoes.irLogin);
+      await expect(page.title()).resolves.toMatch("");
+      await expect(page.waitForSelector(seletores.botoes.irLogin)).resolves.toBeTruthy();
+
+      await page.goto(urls.equipes);
+      await page.waitForSelector(seletores.botoes.irLogin);
+      await expect(page.title()).resolves.toMatch("");
+      await expect(page.waitForSelector(seletores.botoes.irLogin)).resolves.toBeTruthy();
+      
+      await page.goto(urls.deleteInfo);
+      await page.waitForSelector(seletores.botoes.irLogin);
+      await expect(page.title()).resolves.toMatch("");
+      await expect(page.waitForSelector(seletores.botoes.irLogin)).resolves.toBeTruthy();
     });
 
     it('Tela que bloqueia acesso sem a autenticação deve ter um botão que leva a tela de Login', async () => {
@@ -503,6 +518,62 @@ describe('Testes E2E', () => {
       await expect(page.title()).resolves.toMatch("");
       await expect(page.waitForSelector(seletores.botoes.irLogin)).resolves.toBeTruthy();
     });
+
+    it('Com usuário autenticado, testa os redirecionamentos do navBar', async () => {
+      if(await page.url() != urls.login){
+        await page.goto(urls.login);
+        if(!await page.waitForSelector(seletores.botoes.irCadastrar) && await page.url() != urls.login){
+          await page.goto(urls.home);
+          await page.waitForSelector(seletores.botoes.homeSair);
+          await page.click(seletores.botoes.homeSair);
+        }
+      }
+      await page.waitForSelector(seletores.botoes.irCadastrar);
+
+      await page.click(seletores.inputs.loginEmail);
+      await page.keyboard.type(usuarios[0].email);
+      await page.click(seletores.inputs.loginSenha);
+      await page.keyboard.type(usuarios[0].senha);
+
+      await page.click(seletores.botoes.entrar);
+      await expect(page.waitForSelector(seletores.botoes.homeEdital)).resolves.toBeTruthy();
+
+      // Horários
+      await page.click(seletores.botoes.navBar.horarios);
+      await page.waitForSelector(seletores.botoes.horariosVerTimes);
+
+      await expect(page.title()).resolves.toMatch(seletores.titulos.horarios);
+      await expect(await page.waitForSelector(seletores.botoes.horariosVerTimes)).resolves.toBeTruthy();
+
+      // // Contatos
+      // await page.click(seletores.botoes.navBar.contatos);
+
+      // await expect(page.title()).resolves.toMatch(seletores.titulos.contatos);
+
+      // // Meu Perfil
+      // await page.click(seletores.botoes.navBar.perfil);
+      // await page.waitForSelector(seletores.botoes.perfilVerModalidade);
+
+      // await expect(page.title()).resolves.toMatch(seletores.titulos.perfil);
+      // await expect(await page.waitForSelector(seletores.botoes.perfilVerModalidade)).resolves.toBeTruthy();
+
+      // // Home
+      // await page.click(seletores.botoes.navBar.home);
+      // await page.waitForSelector(seletores.botoes.homeEdital);
+
+      // await expect(page.title()).resolves.toMatch(seletores.titulos.home);
+      // await expect(page.waitForSelector(seletores.botoes.homeEdital)).resolves.toBeTruthy();
+      // await expect(page.waitForSelector(seletores.botoes.homeModalidade)).resolves.toBeTruthy();
+
+      // Logout
+      await page.goto(urls.home);
+      await page.waitForSelector(seletores.botoes.homeSair);
+      await page.click(seletores.botoes.homeSair);
+      await page.waitForSelector(seletores.botoes.irCadastrar);
+
+      await expect(page.title()).resolves.toMatch(seletores.titulos.login);
+      await expect(page.waitForSelector(seletores.botoes.irCadastrar)).resolves.toBeTruthy();
+    }, 25000);
   });
 
 
@@ -525,6 +596,14 @@ function receberSeletores(){
     homeEdital: 'button[data-testid="edital"]',
     homeModalidade: 'button[data-testid="ver-modalidades"]',
     homeSair: 'button[data-testid="sair"]',
+    horariosVerTimes: 'button[data-testid="ver-modalidades"]',
+    perfilVerModalidade: 'button[data-testid="ver-modalidades"]',
+    navBar:{
+      home: 'a[data-testid="home"]',
+      horarios: 'a[data-testid="horarios"]',
+      contatos: 'a[data-testid="contatos"]',
+      perfil: 'a[data-testid="perfil"]',
+    },
   };
   const inputs = {
     loginEmail: 'div[data-testid="inputEmail"]',
@@ -545,13 +624,17 @@ function receberSeletores(){
   const titulos = {
     login: 'Semadec - Login',
     cadastrar: 'Semadec - Cadastre-se',
-    home: 'Semadec - Home'
+    home: 'Semadec - Home',
+    horarios: 'Semadec - Horários',
+    contatos: 'Semadec - contatos',
+    perfil: 'Semadec - Meu Perfil'
   };
   return {botoes: botoes, inputs: inputs, titulos: titulos, textos: textos};
 }
 
 function receberUrls(){
-  const url = "http://10.49.6.3:3000"
+  // const url = "http://10.49.6.3:3000"
+  const url = "http://localhost:3000"
   return {
     login: url,
     cadastrar: `${url}/signup`,
@@ -559,6 +642,9 @@ function receberUrls(){
     modalidades: `${url}/modalidades`,
     horarios: `${url}/horarios`,
     contatos: `${url}/contatos`,
-    perfil: `${url}/perfil`
+    perfil: `${url}/perfil`,
+    times: `${url}/times/1`,
+    equipes: `${url}/equipes`,
+    deleteInfo: `${url}/deleteInfo`
   };
 }
